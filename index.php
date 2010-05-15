@@ -52,12 +52,15 @@ if (isset($argv)) {
 		echo "Rating: $rating\n";
 		echo "Debug info: "; var_dump($extra_infos);
 	} else if ($argc > 1 && $argv[1] == 'encode') {
-		$already_running = exec('ps aux | grep "HandBrakeCLI" | grep -v grep | wc -l');
+        
+		$already_running = trim(exec('ps aux | grep "HandBrakeCLI" | grep -v grep | wc -l'));
+        
 		if ($already_running) {
 			#echo "Already encoding (HandBrakeCLI). Exiting.\n";
 			exit(0);
 		}
-		$already_running = exec('ps aux | grep "index.php encode >>" | grep -v grep | wc -l');
+		$already_running = trim(exec('ps aux | grep "index.php encode >>" | grep -v grep | wc -l'));
+		
 		if ($already_running == 2) {
 			#echo "Already encoding (index.php encode). Exiting.\n";
 			exit(0);
@@ -69,6 +72,7 @@ if (isset($argv)) {
 		}
 		$row = mysql_fetch_object($result);
 		$encode_command = $row->value;
+
 		
 		while (TRUE) {
 			$query = "SELECT * FROM files WHERE queued_for_encode != 'no' ORDER BY CAST(queued_for_encode AS UNSIGNED) LIMIT 1";
