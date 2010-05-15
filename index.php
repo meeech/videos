@@ -31,9 +31,13 @@ $paths = load_paths();
 
 if (isset($argv)) {
 	mysql_set_charset('utf8');
-	if ($argc == 1 || $argv[1] == 'find') {
+	if ($argc >= 2 && $argv[1] == 'find') {
 		set_time_limit(23*60*60); // 23h!
-		find_videos();
+		$path = null;
+		if ($argc == 3) {
+			$path = $argv[2];
+		}
+		find_videos($path);
 	} else if ($argc > 2 && $argv[1] == 'identify') {
 		$real_file = $argv[2];
 		list($video_codec, $audio_codec, $width, $height, $extra_infos) = get_video_infos($real_file);
@@ -76,10 +80,18 @@ if (isset($argv)) {
 			if (!file_exists($row->path)) {
 				$row->path = mb_convert_encoding($row->path, "UTF-8", "windows-1252");
 			}
-			if (is_dir($row->path)) {
+			if (is_dir($row->path)) { // VIDEO_TS
 				$output_file = $row->path . '.' . $encode_extension;
 			} else {
 				$output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.' . $encode_extension;
+				if ($output_file == $row->path) {
+					// Oops!
+					if ($encode_extension == 'amp4') {
+						$output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.m4v';
+					} else {
+						$output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.amp4';
+					}
+				}
 			}
 
 			$command = str_replace(array('$input', '$output'), array(quoted_form($row->path), quoted_form($output_file)), $encode_command);
@@ -168,7 +180,7 @@ if (isset($_GET['ee'])) {
 	$parent_path = $_GET['ee'];
 	
 	$query = sprintf("SELECT * FROM files WHERE queued_for_encode = 'no' AND path LIKE '%s%%' ORDER BY path",
-		mysql_escape_string($_GET['ee'])
+		mysql_escape_string($parent_path)
 	);
 	$result = mysql_query($query) or die("Error while querying DB: " . mysql_error());
 	$idle_files = array();
@@ -569,11 +581,11 @@ else if (isset($_GET['e'])) {
 						<?php if ($last_parent_path !== FALSE): ?>
 							</ul>
 						<?php endif; $last_parent_path = $parent_path; ?>
-						<div class="graytitle"><?php echo $parent_path ?></div>
+						<div class="graytitle"><?php echo mb_convert_encoding($parent_path, "UTF-8", "windows-1252") ?></div>
 						<ul class="pageitem">
 					<?php endif; ?>
 						<li class="smallfield">
-							<span class="name"><?php echo $filename ?></span>
+							<span class="name"><?php echo mb_convert_encoding($filename, "UTF-8", "windows-1252") ?></span>
 						</li>
 				<?php endforeach; ?>
 				</ul>
@@ -712,7 +724,12 @@ else if (isset($_GET['e'])) {
 					}
 					?>
 				</div>
-				<div class="graytitle" style="float: right; margin-right: 30px">Sysload <?php echo implode(', ', explode(' ', trim(exec("uptime | awk -F',' '{print \$4 \$5 \$6}' | awk -F':' '{print \$2}'")))) ?></div>
+				<div class="graytitle" style="float: right; margin-right: 30px"><?php
+				$uptime = exec("uptime");
+				if (preg_match('/: (.*), (.*), (.*)$/i', $uptime, $sysload)) {
+					echo "Sysload $sysload[1], $sysload[2], $sysload[3]";
+				}
+				?></div>
 			</div>
 			<?php if (count($queued_encodes) == 0): ?>
 				<div class="graytitle"><br/>You don't have any videos in the queue.</div>
@@ -1051,9 +1068,15 @@ function load_paths() {
 	return $paths;
 }
 
-function find_videos() {
-	global $paths;
-	mysql_query("UPDATE files SET found = 'no'") or die("Error while update found flag DB: " . mysql_error());
+function find_videos($find_path = null) {
+	$query = "UPDATE files SET found = 'no'";
+	if (empty($find_path)) {
+		global $paths;
+	} else {
+		$query .= sprintf(" WHERE path LIKE '%s%%'", mysql_escape_string($find_path));
+		$paths = array($find_path);
+	}
+	mysql_query($query) or die("Error while update found flag DB: " . mysql_error());
 	foreach ($paths as $path) {
 		$extensions = get_video_extensions();
 		$extensions = '-name "*.' . implode('" -o -name "*.', $extensions) . '"';
@@ -1067,7 +1090,11 @@ function find_videos() {
 		}
 		unset($videos);
 	}
-	mysql_query("DELETE FROM files WHERE found = 'no'") or die("Error while update found flag DB: " . mysql_error());
+	$query = "DELETE FROM files WHERE found = 'no'";
+	if (!empty($find_path)) {
+		$query .= sprintf(" AND path LIKE '%s%%'", mysql_escape_string($find_path));
+	}
+	mysql_query($query) or die("Error while update found flag DB: " . mysql_error());
 }
 
 function insert_video($real_file, $rating=null) {
@@ -1148,7 +1175,7 @@ function get_video_infos(&$real_file) {
 		$command = 'export LANG="en_US.UTF-8"; '.PATH_MEDIAINFO.' ' . quoted_form($real_file) . ' | grep "Video\|Audio\|Format\|Width\|Height\|^Text\|Language"';
 		exec($command, $infos);
 		if (count($infos) == 0) {
-			$command = PATH_MEDIAINFO.' ' . quoted_form(mb_convert_encoding($real_file, "UTF-8", "windows-1252")) . ' | grep "Video\|Audio\|Format\|Width\|Height\|^Text\|Language"';
+			$command = PATH_MPLAYER.' ' . quoted_form(mb_convert_encoding($real_file, "UTF-8", "windows-1252")) . ' | grep "Video\|Audio\|Format\|Width\|Height\|^Text\|Language"';
 			exec($command, $infos);
 			if (count($infos) == 0) {
 				$command = PATH_MPLAYER.' -identify ' . quoted_form($real_file) . ' -vo null -ao null -frames 0 2>&1 | grep -m 50 "AUDIO\|VIDEO\|mplayer\|fail"';
@@ -1625,22 +1652,19 @@ function remove_duplicate_videos(&$content_files) {
 }
 
 function queue_video_for_encode($real_file) {
-		$query = sprintf("SELECT MAX(CAST(queued_for_encode AS UNSIGNED)) AS max FROM files WHERE queued_for_encode != 'no'",
-			mysql_escape_string($real_file)
-		);
-		$result = mysql_query($query) or die("Error while querying DB: " . mysql_error());
-		if (mysql_num_rows($result) == 0) {
-			$max = 0;
-		} else {
-			$row = mysql_fetch_object($result);
-			$max = $row->max;
-		}
-
-		$query = sprintf("UPDATE files SET queued_for_encode = '%d' WHERE path = '%s'",
-			$row->max + 1,
-			mysql_escape_string($real_file)
-		);
-		mysql_query($query) or die("Error while updating DB: " . mysql_error());
+	$query = "SELECT MAX(CAST(queued_for_encode AS UNSIGNED)) AS max FROM files WHERE queued_for_encode != 'no'";
+	$result = mysql_query($query) or die("Error while querying DB: " . mysql_error());
+	if (mysql_num_rows($result) == 0) {
+		$max = 0;
+	} else {
+		$row = mysql_fetch_object($result);
+		$max = $row->max;
+	}
+	$query = sprintf("UPDATE files SET queued_for_encode = '%d' WHERE path = '%s'",
+		$row->max + 1,
+		mysql_escape_string($real_file)
+	);
+	mysql_query($query) or die("Error while updating DB: " . mysql_error());
 }
 
 function get_files_for_user($current_path) {
