@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 define('PATH_MEDIAINFO', '/usr/local/bin/mediainfo');
 define('PATH_MPLAYER', '/usr/local/bin/mplayer');
 
