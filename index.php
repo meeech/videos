@@ -1,4 +1,7 @@
 <?php
+define('PATH_MEDIAINFO', '/usr/local/bin/mediainfo');
+define('PATH_MPLAYER', '/usr/local/bin/mplayer');
+
 mysql_connect('localhost', 'videos5', 'videos5') or die("Can't connect to MySQL database.");
 mysql_select_db('videos5') or die("Database 'videos5' not found, or unusable.");
 
@@ -1135,20 +1138,20 @@ function insert_video($real_file, $rating=null) {
 
 function get_video_infos(&$real_file) {
 	if (strpos($real_file, 'VIDEO_TS') == strlen($real_file) - 8) {
-		$command = '/usr/bin/mplayer -identify -dvd-device ' . quoted_form($real_file) . ' dvd://1 -vo null -ao null -frames 0 2>&1 | grep -m 50 "AUDIO\|VIDEO\|mplayer\|fail\|audio stream"';
+		$command = PATH_MPLAYER.' -identify -dvd-device ' . quoted_form($real_file) . ' dvd://1 -vo null -ao null -frames 0 2>&1 | grep -m 50 "AUDIO\|VIDEO\|mplayer\|fail\|audio stream"';
 		exec($command, $infos);
 	} else if (strpos($real_file, 'VIDEO_TS.IFO') == strlen($real_file) - 12) {
 		$real_file = substr($real_file, 0, strlen($real_file) - 13);
-		$command = '/usr/bin/mplayer -identify -dvd-device ' . quoted_form($real_file) . ' dvd://1 -vo null -ao null -frames 0 2>&1 | grep -m 50 "AUDIO\|VIDEO\|mplayer\|fail\|audio stream"';
+		$command = PATH_MPLAYER.' -identify -dvd-device ' . quoted_form($real_file) . ' dvd://1 -vo null -ao null -frames 0 2>&1 | grep -m 50 "AUDIO\|VIDEO\|mplayer\|fail\|audio stream"';
 		exec($command, $infos);
 	} else {
-		$command = 'export LANG="en_US.UTF-8"; /usr/bin/mediainfo ' . quoted_form($real_file) . ' | grep "Video\|Audio\|Format\|Width\|Height\|^Text\|Language"';
+		$command = 'export LANG="en_US.UTF-8"; '.PATH_MEDIAINFO.' ' . quoted_form($real_file) . ' | grep "Video\|Audio\|Format\|Width\|Height\|^Text\|Language"';
 		exec($command, $infos);
 		if (count($infos) == 0) {
-			$command = '/usr/bin/mediainfo ' . quoted_form(mb_convert_encoding($real_file, "UTF-8", "windows-1252")) . ' | grep "Video\|Audio\|Format\|Width\|Height\|^Text\|Language"';
+			$command = PATH_MEDIAINFO.' ' . quoted_form(mb_convert_encoding($real_file, "UTF-8", "windows-1252")) . ' | grep "Video\|Audio\|Format\|Width\|Height\|^Text\|Language"';
 			exec($command, $infos);
 			if (count($infos) == 0) {
-				$command = '/usr/bin/mplayer -identify ' . quoted_form($real_file) . ' -vo null -ao null -frames 0 2>&1 | grep -m 50 "AUDIO\|VIDEO\|mplayer\|fail"';
+				$command = PATH_MPLAYER.' -identify ' . quoted_form($real_file) . ' -vo null -ao null -frames 0 2>&1 | grep -m 50 "AUDIO\|VIDEO\|mplayer\|fail"';
 				exec($command, $infos);
 			}
 		}
