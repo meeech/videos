@@ -1,0 +1,3 @@
+[submodule "php/notorm"]
+	path = php/notorm
+	url = http://github.com/vrana/notorm.git

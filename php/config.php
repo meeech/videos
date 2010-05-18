@@ -5,6 +5,13 @@
 */
 class Config {
 
+    //DB
+    var $dbtype   = 'mysql';
+    var $dbname   = 'videos5';
+    var $username = 'videos5';
+    var $password = 'videos5';
+
+    //Binaries
     var $mediainfo = '/usr/local/bin/mediainfo';
     var $mplayer = '/usr/local/bin/mplayer';
 
