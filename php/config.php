@@ -8,6 +8,15 @@ class Config {
     var $mediainfo = '/usr/local/bin/mediainfo';
     var $mplayer = '/usr/local/bin/mplayer';
 
+    /**
+     * The encode command. A sprintf ready.
+     * %1$s input
+     * %2$s output
+     *
+     * @var string
+     **/
+    var $encode_command = '/usr/bin/nice /usr/local/bin/HandBrakeCLI -L -i %1$s -o %2$s -e x264 -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -X 720 -Y 480 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6';
+
     var $ratings_definitions = array(
         'Unrated' => '',
         'G' => 'General audience',
@@ -22,5 +31,7 @@ class Config {
         'TV-14' => 'May be unsuitable for children under 14',
         'TV-MA' => 'Mature audience'
     );
+
+    
 
 }
