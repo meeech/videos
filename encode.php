@@ -35,49 +35,46 @@ $row = $db->files[13]->update(array('encode'=>1));
 //And so we dont have worry about how big db gets.
 $file = false;
 do {
-    //Look for an item, mark off filesRemaining, and exit if we're done here. 
+
     $file = $db->files()->where('encode > 0')->limit($config->batchSize)->fetch();
     if(!$file) { 
         echo "\nNo files remaining";
         continue; 
     }
-    //Begin Encoding here.
+
+    //Sanity check, make sure the file exists
     if(!file_exists($file['path'])) {
         echo $file['path'] . ' not found.***';
-        //Pipe to log?
         continue;
     }
     
-    // VIDEO_TS folders
+    // Check if we've queued a VIDEO_TS folders
     if (is_dir($file['path'])) {
         $output_file = $file['path'] . '.' . $config->encode_extension;
     }
     else {
         $pathInfo = pathinfo($file['path']);
         $output_file = $pathInfo['dirname'] .'/'.$pathInfo['filename'].'.'.$config->encode_extension;
-
-        //We'll be removing this in v2, since we will want to segregate queued videos from already encoded
-        //Basically, it's overwrite protection
-        // if ($output_file == $row->path) {
-        //     // Oops!
-        //     if ($encode_extension == 'amp4') {
-        //         $output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.m4v';
-        //     } else {
-        //         $output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.amp4';
-        //     }
-        // }
     }
     
-    $command = sprintf($config->encode_command, $file['path'], $output_file);
-    // var_dump($command);
-
+    //Trigger the encoding. Would be good if we could pipe the % done info somewhere to make it visible in browser
+    //Look at how get_encoding_progress does it
+    $command = sprintf($config->encode_command, escapeshellarg($file['path']), escapeshellarg($output_file));
     echo "Launching encode: $command\n";
     passthru($command);
-    
-    $file->update(array('encode'=>0));
-    //Debug
-    // echo "\nencoding ". $file['path'];
 
+    //Confirm the file was made
+    if(!file_exists($output_file)){
+        echo "\nError: Encoded File not created.";
+    }
+
+    //Then all the Browser / Video info crazyness stuff. extract into own class
+
+    //Remove from queue
+    $file->update(array('encode'=>0));
+
+    //Insert video
+    
     sleep(1);
 } while ($file);
 
