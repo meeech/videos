@@ -53,26 +53,30 @@ do {
         $output_file = $file['path'] . '.' . $config->encode_extension;
     }
     else {
-        $output_file = dirname($file['path']) . '/' . pathinfo($file['path'],PATHINFO_FILENAME) .'.'.$config->encode_extension;
-        echo $output_file;
-/*
-        $output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.' . $encode_extension;
-        if ($output_file == $row->path) {
-            // Oops!
-            if ($encode_extension == 'amp4') {
-                $output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.m4v';
-            } else {
-                $output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.amp4';
-            }
-        }
-*/
+        $pathInfo = pathinfo($file['path']);
+        $output_file = $pathInfo['dirname'] .'/'.$pathInfo['filename'].'.'.$config->encode_extension;
+
+        //We'll be removing this in v2, since we will want to segregate queued videos from already encoded
+        //Basically, it's overwrite protection
+        // if ($output_file == $row->path) {
+        //     // Oops!
+        //     if ($encode_extension == 'amp4') {
+        //         $output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.m4v';
+        //     } else {
+        //         $output_file = substr($row->path, 0, strrpos($row->path, '.')) . '.amp4';
+        //     }
+        // }
     }
     
-    
+    $command = sprintf($config->encode_command, $file['path'], $output_file);
+    // var_dump($command);
+
+    echo "Launching encode: $command\n";
+    passthru($command);
     
     $file->update(array('encode'=>0));
     //Debug
-    echo "\nencoding ". $file['path'];
+    // echo "\nencoding ". $file['path'];
 
     sleep(1);
 } while ($file);
