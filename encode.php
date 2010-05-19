@@ -27,7 +27,9 @@ set_time_limit(0);
 $pdo = new PDO("{$config->dbtype}:dbname={$config->dbname}", $config->username, $config->password);
 $db = new NotORM($pdo);
 
-
+//Debug
+$row = $db->files[13]->update(array('encode'=>1));
+//
 
 //Basic idea is we're doing a batch at a time so we don't overload server, 
 //And so we dont have worry about how big db gets.
