@@ -27,20 +27,28 @@ set_time_limit(0);
 $pdo = new PDO("{$config->dbtype}:dbname={$config->dbname}", $config->username, $config->password);
 $db = new NotORM($pdo);
 
+
+
 //Basic idea is we're doing a batch at a time so we don't overload server, 
 //And so we dont have worry about how big db gets.
-$filesRemaining = true;
+$file = false;
 do {
     //Look for an item, mark off filesRemaining, and exit if we're done here. 
-    $item = $db->files()->where('encode > 0')->limit($config->batchSize);
+    $file = $db->files()->where('encode > 0')->limit($config->batchSize)->fetch();
 
-    $filesRemaining = (bool)$item->count();
-    if(!$filesRemaining) { continue; }
-
-    $item->update(array('encode'=>0));
+    // $filesRemaining = (bool)$item->count();
+    if(!$file) { 
+        echo 'No files remaining';
+        continue; 
+    }
+    //Begin Encoding here.
+    if(!file_exists($file['path'])) {
+        echo $file['path'];
+    }
+    $file->update(array('encode'=>0));
     //Debug
-    var_dump($item->count());
+    // var_dump($item->count());
     sleep(1);
-} while (($filesRemaining == true));
+} while ($file);
 
-echo 'done';
+echo "\nDone";
