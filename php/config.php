@@ -16,6 +16,13 @@ class Config {
     var $mplayer = '/usr/local/bin/mplayer';
 
     /**
+     * How many videos to pull from db at a time.
+     *
+     * @var int
+     **/
+    var $batchSize = 1;
+
+    /**
      * The encode command. A sprintf ready.
      * %1$s input
      * %2$s output
