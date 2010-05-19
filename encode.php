@@ -9,9 +9,7 @@
  * @require php5.3 (though should work in 5.2)
  * @author Mitchell Amihod
  */
-require('php/config.php');
-require('php/encoder.php');
-require('php/db.php');
+require('php/header.php');
 
 $config = new Config();
 $encoder = new Encoder(array('config' => $config));
