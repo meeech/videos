@@ -22,11 +22,8 @@ if($encoder->is_running()) {
 //No time limit on the encoding process
 set_time_limit(0);
 
-$pdo = new PDO("{$config->dbtype}:dbname={$config->dbname}", $config->username, $config->password);
-$db = new NotORM($pdo);
-
 //Debug
-$row = $db->files[13]->update(array('encode'=>1));
+$row = $db->files[13]->update(array('encode'=>1, 'error'=>0));
 //////
 
 //Basic idea is we're doing a batch at a time so we don't overload server, 
@@ -34,7 +31,7 @@ $row = $db->files[13]->update(array('encode'=>1));
 $file = false;
 do {
 
-    $file = $db->files()->where('encode > 0')->limit($config->batchSize)->fetch();
+    $file = $db->files()->where('encode > 0')->where('error = 0')->limit($config->batchSize)->fetch();
     if(!$file) { 
         echo "\nNo files remaining";
         continue; 
@@ -42,7 +39,8 @@ do {
 
     //Sanity check, make sure the file exists
     if(!file_exists($file['path'])) {
-        echo $file['path'] . ' not found.***';
+        $file->update(array('error'=>1));
+        echo '***' . $file['path'] . ' not found.***';
         continue;
     }
     
