@@ -30,8 +30,15 @@ $row = $db->files[13]->update(array('encode'=>1, 'error'=>0));
 //And so we dont have worry about how big db gets.
 $file = false;
 do {
+    
+    //Remember - using fetch just grabs the first record in this result. 
+    //Batch size is currently being ignored. 
+    $file = $db->files()
+        ->where('encode > 0')
+        ->where('error = 0')
+        ->limit($config->batchSize)
+        ->fetch();
 
-    $file = $db->files()->where('encode > 0')->where('error = 0')->limit($config->batchSize)->fetch();
     if(!$file) { 
         echo "\nNo files remaining";
         continue; 
