@@ -10,6 +10,12 @@ class Config {
     var $dbname   = 'videos5';
     var $username = 'videos5';
     var $password = 'videos5';
+    
+    //Path to folders we want to look for videos
+    //Can be anywhere accessible to the script
+    //
+    //@todo look into allow http/ftp/ access?
+    var $paths = array('/Users/mitch/Sites/videos5/dropbox');
 
     //Binaries
     var $mediainfo = '/usr/local/bin/mediainfo';
