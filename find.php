@@ -65,7 +65,8 @@ foreach ($config->paths as $path) {
     }
 }
 
-//Purge from system. For now, just mark found as 2
+//Purge from system. 
+//Don't worry about queue table. foreign key constraint setup
 $db->videos()->where('found = ?', array(0))->delete();
 
 echo "Done";
