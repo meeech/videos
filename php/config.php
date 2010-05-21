@@ -37,6 +37,14 @@ class Config {
      **/
     var $encode_command = '/usr/bin/nice /usr/local/bin/HandBrakeCLI -L -i %1$s -o %2$s -e x264 -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -X 720 -Y 480 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6';
 
+
+    /**
+     * List of file types to offer to encode.
+     *
+     * @var string
+     **/
+    var $video_extensions = array('m4v', 'mp4', 'ts', 'mov', 'divx', 'xvid', 'vob', 'm2v', 'avi', 'mpg', 'mpeg', 'mkv', 'm2t', 'm2ts');
+
     /**
      * undocumented class variable
      *
@@ -59,6 +67,10 @@ class Config {
         'TV-MA' => 'Mature audience'
     );
 
-    
+    public function __call($name, $args) {
+        if(property_exists($this,$name)) {
+            return $this->$name;
+        }
+    }
 
 }
