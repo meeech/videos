@@ -26,19 +26,25 @@ $config = new Config();
 //No time limit on the finding process
 set_time_limit(0);
 
-// $pdo = new PDO("{$config->dbtype}:dbname={$config->dbname}", $config->username, $config->password);
-// $db = new NotORM($pdo);
-
 //Debug
-$row = $db->videos[13]->update(array('found'=>'yes'));
+$row = $db->videos[13]->update(array('found'=>1));
+$row = $db->videos[14]->update(array('found'=>1));
 //////
 foreach ($config->paths as $path) {
     echo "\n Working Path: {$path}";
-    $db->videos()->where('path LIKE ?', array("%{$path}%"))->update(array('found'=>'no'));
+    //Reset all found...
+    $db->videos()->where('path LIKE ?', array("%{$path}%"))->update(array('found'=>0));
 
-    // $extensions = get_video_extensions();
-    // var_dump($extensions);
+    $extensions = '-name "*.' . implode('" -o -name "*.', $config->video_extensions()) . '"';
+
+    $command = 'find ' . escapeshellarg($path) . ' \( ' . $extensions . ' -o -name "VIDEO_TS" -o \( -name "VIDEO_TS.IFO" -a ! -wholename "*/VIDEO_TS/VIDEO_TS.IFO" \) \)';
+    #echo "$command\n";
+    exec($command, $videos);
     
-
+    // var_dump($extensions);
 }
+
+//Purge from system. For now, just mark found as 2
+$db->videos()->where('found = ?', array(0))->update(array('found'=>2));
+
 echo "\nDone";
