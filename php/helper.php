@@ -10,6 +10,64 @@ class Helper {
         $this->config = $config;
     }
 
+    function is_html5_ready($real_file, $video_codec, $audio_codec) {
+        $ext = substr($real_file, strrpos($real_file, '.')+1);
+
+        // H.264 or MPEG-4 video
+        $browser = $this->to_human_codec($video_codec) == 'H.264' || $this->to_human_codec($video_codec) == 'MPEG-4';
+
+        // MP4 or MOV container (Android doesn't support MOV; we'll handle that below...)
+        $browser &= (strpos($ext, 'mp4') !== FALSE || strpos($ext, 'm4v') !== FALSE || strpos($ext, 'mov') !== FALSE);
+
+        // AAC or MP3 audio (or no audio!)
+        $browser &= empty($audio_codec) || strpos($audio_codec, 'AAC') === 0 || strpos($audio_codec, 'MPEG Audio Layer 3') === 0;
+
+        // Mobile (iPhone/iPod Touch) only support Baseline profile, up to level 3.0, with AAC-LC audio
+        $mobile = $browser 
+            && (strpos($video_codec, 'Baseline@L1') !== FALSE 
+                || strpos($video_codec, 'Baseline@L2') !== FALSE 
+                || strpos($video_codec, 'Baseline@L3.0') !== FALSE 
+                || strpos($video_codec, 'Simple@') !== FALSE
+                || $video_codec == 'MPEG-4 Visual')
+            && (strpos($audio_codec, 'AAC LC') !== FALSE || empty($audio_codec));
+
+        // Android doesn't support MOV
+        $android = $mobile && strpos($ext, 'mov') === FALSE;
+
+        // iPad only support Baseline profile, up to level 3.1, with AAC-LC audio
+        $ipad = $browser 
+            && (strpos($video_codec, 'Baseline@L1') !== FALSE 
+                || strpos($video_codec, 'Baseline@L2') !== FALSE 
+                || strpos($video_codec, 'Baseline@L3.0') !== FALSE 
+                || strpos($video_codec, 'Baseline@L3.1') !== FALSE 
+                || strpos($video_codec, 'Main@L1') !== FALSE 
+                || strpos($video_codec, 'Main@L2') !== FALSE 
+                || strpos($video_codec, 'Main@L3.0') !== FALSE 
+                || strpos($video_codec, 'Main@L3.1') !== FALSE 
+                || strpos($video_codec, 'High@L3.0') !== FALSE 
+                || strpos($video_codec, 'High@L3.1') !== FALSE 
+                || strpos($video_codec, 'Simple@') !== FALSE
+                || $video_codec == 'MPEG-4 Visual')
+            && (strpos($audio_codec, 'AAC LC') !== FALSE || empty($audio_codec));
+
+        $html5_ready = array();
+        if ($browser) {
+            $html5_ready[] = 'browser';
+        }
+        if ($mobile) {
+            $html5_ready[] = 'mobile';
+        }
+        if ($ipad) {
+            $html5_ready[] = 'ipad';
+        }
+        if ($android) {
+            $html5_ready[] = 'android';
+        }
+
+
+        return implode(',',$html5_ready);
+    }
+
     function video_infos(&$real_file) {
         if (strpos($real_file, 'VIDEO_TS') == strlen($real_file) - 8) {
             $command = $this->config->mplayer().' -identify -dvd-device ' . escapeshellarg($real_file) . ' dvd://1 -vo null -ao null -frames 0 2>&1 | grep -m 50 "AUDIO\|VIDEO\|mplayer\|fail\|audio stream"';
@@ -110,8 +168,45 @@ class Helper {
         if ($audio_codec == '') {
             $audio_codec == 'unknown';
         }
-        return array($video_codec, $audio_codec, $width, $height, $infos);
+        return compact(
+            'video_codec', 
+            'audio_codec', 
+            'width', 
+            'height', 
+            'infos'
+        );
     }
 
+
+    function to_human_codec($codec) {
+        // MPlayer
+        if ($codec == 'ffdivx') return 'MPEG-4 DivX';
+        if ($codec == 'ffodivx') return 'MPEG-4';
+        if ($codec == 'ffdv') return 'DV';
+        if ($codec == 'ffh264') return 'H.264';
+        if ($codec == 'ffvc1') return 'VC-1';
+        if ($codec == 'ffwmv3') return 'WMV';
+        if ($codec == 'mpegpes') return 'MPEG-2';
+        // Audio
+        if ($codec == 'a52') return 'AC-3';
+        if ($codec == 'faad') return 'AAC';
+        if ($codec == 'ffadpcmimaqt') return 'ADPCM';
+        if ($codec == 'ffvorbis') return 'Ogg Vorbis';
+        // MediaInfo
+        if ($codec == 'DX50') return 'MPEG-4 DivX';
+        if ($codec == 'FMP4') return 'MPEG-4';
+        if (strtoupper($codec) == 'XVID') return 'MPEG-4 XviD';
+        if (strpos($codec, 'AVC') !== FALSE) return 'H.264';
+        if (strpos($codec, 'MPEG Video v.1') !== FALSE) return 'MPEG-1';
+        if (strpos($codec, 'MPEG Video v.2') !== FALSE) return 'MPEG-2';
+        if (strpos($codec, 'MPEG-4 Visual') !== FALSE) return 'MPEG-4';
+        if (strpos($codec, 'VC-1') !== FALSE) return 'VC-1';
+        // Audio
+        if ($codec == 'MPEG Audio') return 'MPEG';
+        if ($codec == 'MPEG Audio Layer 2') return 'MP2';
+        if ($codec == 'MPEG Audio Layer 3') return 'MP3';
+        if ($codec == 'Vorbis') return 'Ogg Vorbis';
+        return strtoupper($codec);
+    }
 
 }

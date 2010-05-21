@@ -16,7 +16,7 @@
 require('php/header.php');
 
 $config = new Config();
-// $encoder = new Encoder(array('config' => $config));
+$helper = new Helper($config);
 
 // if($encoder->is_running()) {
 //     echo 'Encoder seems to be running already.';
@@ -27,24 +27,45 @@ $config = new Config();
 set_time_limit(0);
 
 //Debug
-$row = $db->videos[13]->update(array('found'=>1));
-$row = $db->videos[14]->update(array('found'=>1));
+// $row = $db->videos[13]->update(array('found'=>1));
+// $row = $db->videos[14]->update(array('found'=>1));
 //////
+
 foreach ($config->paths as $path) {
-    echo "\n Working Path: {$path}";
+    echo "Working Path: {$path}\n";
+
     //Reset all found...
     $db->videos()->where('path LIKE ?', array("%{$path}%"))->update(array('found'=>0));
 
+    //Build the find command
     $extensions = '-name "*.' . implode('" -o -name "*.', $config->video_extensions()) . '"';
-
     $command = 'find ' . escapeshellarg($path) . ' \( ' . $extensions . ' -o -name "VIDEO_TS" -o \( -name "VIDEO_TS.IFO" -a ! -wholename "*/VIDEO_TS/VIDEO_TS.IFO" \) \)';
-    #echo "$command\n";
+
     exec($command, $videos);
-    
-    // var_dump($extensions);
+    foreach ($videos as $videopath) {
+        echo "Scanning $videopath \n";
+        $vidInfo = $helper->video_infos($path);
+        $vidInfo['path'] = $videopath;
+        $vidInfo['resolution'] = $vidInfo['width'].'x'.$vidInfo['height'];
+        $vidInfo['found'] = 1;
+        $vidInfo['html5_ready'] = $helper->is_html5_ready($videopath, $vidInfo['video_codec'], $vidInfo['audio_codec']);
+        unset($vidInfo['infos'], $vidInfo['height'], $vidInfo['width'] );
+                
+        $video = $db->videos()
+            ->where('path LIKE ?', array($videopath))
+            ->fetch();
+
+        if(!$video) {
+            echo "Creating new video.\n";
+            $video = $db->videos($vidInfo);//create
+        } else {
+            echo "Updating.\n";
+            $video->update($vidInfo);
+        }
+    }
 }
 
 //Purge from system. For now, just mark found as 2
-$db->videos()->where('found = ?', array(0))->update(array('found'=>2));
+$db->videos()->where('found = ?', array(0))->delete();
 
-echo "\nDone";
+echo "Done";
