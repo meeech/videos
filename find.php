@@ -26,13 +26,18 @@ $config = new Config();
 //No time limit on the finding process
 set_time_limit(0);
 
-//Debug
-$row = $db->files[13]->update(array('found'=>'yes'));
-//////
-foreach ($config->encodePaths as $path) {
-    echo "\n Working Path: {$path}";
-    $db->files()->where('path LIKE ?', array("%{$path}%"))->update(array('found'=>'no'));
+// $pdo = new PDO("{$config->dbtype}:dbname={$config->dbname}", $config->username, $config->password);
+// $db = new NotORM($pdo);
 
+//Debug
+$row = $db->videos[13]->update(array('found'=>'yes'));
+//////
+foreach ($config->paths as $path) {
+    echo "\n Working Path: {$path}";
+    $db->videos()->where('path LIKE ?', array("%{$path}%"))->update(array('found'=>'no'));
+
+    // $extensions = get_video_extensions();
+    // var_dump($extensions);
     
 
 }

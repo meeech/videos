@@ -23,7 +23,7 @@ if($encoder->is_running()) {
 set_time_limit(0);
 
 //Debug
-$row = $db->files[13]->update(array('encode'=>1, 'error'=>0));
+$row = $db->videos[13]->update(array('encode'=>1, 'error'=>0));
 //////
 
 //Basic idea is we're doing a batch at a time so we don't overload server, 
@@ -33,7 +33,7 @@ do {
     
     //Remember - using fetch just grabs the first record in this result. 
     //Batch size is currently being ignored. 
-    $file = $db->files()
+    $file = $db->videos()
         ->where('encode > 0')
         ->where('error = 0')
         ->limit($config->batchSize)
