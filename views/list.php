@@ -12,6 +12,7 @@ if(isset($_GET['path']) && in_array($_GET['path'], $config->paths)) {
 <?php
 if ($path) {
 //list out all the files & folders
+//look to use RecursiveDirectoryIterator
 } 
 else { ?>
         <div class="info">Sorry. Something seems wrong with your path.</div>        

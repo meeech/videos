@@ -5,8 +5,6 @@
     <ul class="rounded">
     <?php
     //Pull paths from config - this represents the dirs we'll drill down to.
-    //look to use RecursiveDirectoryIterator
-    // dir(string directory, [resource context])
     foreach ($config->paths as $path) { ?>
         <li><a href="index.php?page=list&path=<?=$path?>"><?= $path ?></a></li>
     <?php 
