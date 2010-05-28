@@ -1,4 +1,7 @@
-<?php require 'views/header.php' ?>
+<?php 
+require_once 'php/header.php';
+require 'views/header.php';
+?>
 
 <?php
 $page = 'home';
