@@ -8,6 +8,7 @@ $password = (isset($_POST['password'])) ? md5($_POST['password']): false;
 $result = $db->users->where('username', $username)->where('password', $password)->fetch();
 
 if(false !== $result) {
+    setcookie('videos5_user', $result['username']);
     require('views/home.php');
 } else {
     $login_errors = 'There was an error with your username or password.';
