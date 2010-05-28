@@ -1,4 +1,4 @@
-<div id="home" class="current">
+<div id="home">
     <?php require 'views/toolbar.php' ?>
     <ul class="rounded">
         <li class="arrow"><a href="views/login.php">Login</a></li>

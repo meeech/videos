@@ -10,7 +10,7 @@
 
     <script type="text/javascript" charset="utf-8">
         var jQT = new $.jQTouch({
-            'formSelector': 'form.ajax' 
+            // 'formSelector': 'form' 
         });
     </script>
 

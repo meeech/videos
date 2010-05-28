@@ -1,4 +1,4 @@
 <div class="toolbar">
-    <h1>jQTouch</h1>
-    <a class="button slideup" href="#home">Home</a>
+    <h1>Videos</h1>
+    <a class="goTo button slideup" href="#home">Home</a>
 </div>

@@ -1,19 +1,19 @@
-<div>
+<div id="login">
     <?php require 'toolbar.php'; ?>
 
     <?php 
     if (!empty($login_errors)){
         echo $login_errors;
     }
-    
-    if(!isset($username)) { $username = 'username'; }
+    //@debug remove my dev credentials
+    if(!isset($username)) { $username = 'mitch'; }
     ?>
 
     <form action="login.php" method="post">
         <label for="username">Username</label>
         <input type="text" name="username" value="<?= $username ?>">
         <label for="password">Password</label>
-        <input type="password" name="password" value="">
+        <input type="password" name="password" value="1234">
         <input type="submit" value="Submit">
     </form>
     
