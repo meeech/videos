@@ -9,7 +9,9 @@
     <style type="text/css" media="screen">@import "../jqtouch/themes/apple/theme.css";</style>
 
     <script type="text/javascript" charset="utf-8">
-        var jQT = new $.jQTouch();
+        var jQT = new $.jQTouch({
+            'formSelector': 'form.ajax' 
+        });
     </script>
 
 </head>
