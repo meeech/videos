@@ -74,3 +74,5 @@ class Config {
     }
 
 }
+
+$config = new Config();

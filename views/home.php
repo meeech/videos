@@ -1,3 +1,4 @@
+<?php require_once 'php/config.php'; ?>
 <div id="home">
     <?php require 'views/toolbar.php' ?>
     
@@ -6,7 +7,6 @@
     //Pull paths from config - this represents the dirs we'll drill down to.
     //look to use RecursiveDirectoryIterator
     // dir(string directory, [resource context])
-    $config = new Config();
     foreach ($config->paths as $path) { ?>
         <li><?= $path ?></li>
     <?php 
