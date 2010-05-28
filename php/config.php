@@ -15,7 +15,7 @@ class Config {
     //Can be anywhere accessible to the script
     //
     //@todo look into allow http/ftp/ access?
-    var $paths = array('/Users/mitch/Sites/videos5/dropbox');
+    var $paths = array('/Users/mitch/Sites/videos5/dropbox','/Another/Example/Path');
 
     //Binaries
     var $mediainfo = '/usr/local/bin/mediainfo';
