@@ -10,6 +10,15 @@ class Helper {
         $this->config = $config;
     }
 
+    /**
+     * Used to calculate the final and request path. 
+     * @param array $get The $_GET array
+     * @return array finalPath, requestPath
+     **/
+    function getPaths($get) {
+        
+    }
+
     function is_html5_ready($real_file, $video_codec, $audio_codec) {
         $ext = substr($real_file, strrpos($real_file, '.')+1);
 

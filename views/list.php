@@ -3,6 +3,8 @@
 //Make sure no one trying to be too clever. 
 //This can obviously be done more securely. 
 //maybe we'll just make it id based (well, array index key for now)
+
+//@bookmark extract this to helper. Also, make $helper set itself up when you include the helper file.
 $finalPath = $requestPath = false;
 if(isset($_GET['path']) && in_array($_GET['path'], $config->paths)) {
     $finalPath = $requestPath = realpath($_GET['path']);
@@ -15,7 +17,7 @@ if(isset($_GET['path']) && in_array($_GET['path'], $config->paths)) {
         }
     }
 }
-/////
+//////
 ?>
 <div>
 <?php require 'views/toolbar.php' ?>
