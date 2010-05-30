@@ -1,0 +1,17 @@
+#jqt ul.videos li a {
+    background-position: 5px 15px;
+    background-repeat: no-repeat;
+    padding-left: 23px;
+}    
+
+#jqt ul.videos li a.directory {
+    background-image: url('folder.png');
+}    
+
+#jqt ul li a.movie {
+    background-image: url('film.png');
+}    
+
+#jqt ul li a.movie-bad {
+    background-image: url('film_error.png');
+}    

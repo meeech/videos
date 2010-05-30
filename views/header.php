@@ -13,7 +13,7 @@
             // 'formSelector': 'form' 
         });
     </script>
-
+    <style type="text/css" media="screen">@import "css/style.css";</style> 
 </head>
 <body>
 <div id="jqt">
