@@ -15,6 +15,7 @@
  */
 require('php/header.php');
 
+//@note to self when you revist here, remember, these are now instanced from the included file.
 $config = new Config();
 $helper = new Helper($config);
 

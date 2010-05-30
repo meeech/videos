@@ -1,27 +1,8 @@
-<?php
-//This whole chunk is basically to check the incoming path request. 
-//Make sure no one trying to be too clever. 
-//This can obviously be done more securely. 
-//maybe we'll just make it id based (well, array index key for now)
-
-//@bookmark extract this to helper. Also, make $helper set itself up when you include the helper file.
-$finalPath = $requestPath = false;
-if(isset($_GET['path']) && in_array($_GET['path'], $config->paths)) {
-    $finalPath = $requestPath = realpath($_GET['path']);
-    //Add on subpath if it exists
-    if(isset($_GET['sub']) && $finalPath) {
-        //COnfirm they aren't trying to break out, like with ../../..
-        $finalPath = realpath($requestPath . $_GET['sub']);
-        if(false === strpos($finalPath, $requestPath)) {
-            $finalPath = false;
-        }
-    }
-}
-//////
-?>
 <div>
 <?php require 'views/toolbar.php' ?>
 <?php
+//This sets finalPath, requestPath
+extract($helper->getPaths($_GET));
 if ($finalPath) { ?>
     
     <ul class="videos">
@@ -64,13 +45,9 @@ if ($finalPath) { ?>
     }
     ?>
     </ul>
-    <?php
-    
+<?php 
 } 
 else { ?>
-        <div class="info">Sorry. Something seems wrong with your path.</div>        
-<?php
-}
-?>
-
+    <div class="info">Sorry. Something seems wrong with your path.</div>        
+<?php } ?>
 </div>

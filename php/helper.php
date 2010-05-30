@@ -12,11 +12,29 @@ class Helper {
 
     /**
      * Used to calculate the final and request path. 
+     *
+     * This whole chunk is basically to check the incoming path request. 
+     * Make sure no one trying to be too clever. This can prolly be done more securely.
+     * Maybe we'll just make path id based (well, array index key for now)
+     *
      * @param array $get The $_GET array
      * @return array finalPath, requestPath
      **/
     function getPaths($get) {
         
+        $finalPath = $requestPath = false;
+        if(isset($get['path']) && in_array($get['path'], $this->config->paths)) {
+            $finalPath = $requestPath = realpath($get['path']);
+            //Add on subpath if it exists
+            if(isset($get['sub']) && $finalPath) {
+                //COnfirm they aren't trying to break out, like with ../../..
+                $finalPath = realpath($requestPath . $get['sub']);
+                if(false === strpos($finalPath, $requestPath)) {
+                    $finalPath = false;
+                }
+            }
+        }
+        return compact('finalPath','requestPath');
     }
 
     function is_html5_ready($real_file, $video_codec, $audio_codec) {
@@ -219,3 +237,6 @@ class Helper {
     }
 
 }
+
+//Right now, we assume config is always available - thats the pattern
+$helper = new Helper($config);
