@@ -36,17 +36,16 @@ if ($finalPath) { ?>
 
         $class = 'movie' ;
         $link = '';
+        
         //Set up link, class for directory
         if($file->isDir()) {
             $class = 'directory';
             //BUild up the link.
-            $link = 'index.php?';
-            $link .= 'page=list';
+            $link = 'index.php?page=list';
             //Right now, keeping path and subpath
             //path can only be one of the values in $config->paths, and sub is the rest
             $link .= "&amp;path={$path}";
-            //Sounds silly, but we entitize the & otherwise we end up with 
-            //&sub being 'interpreted'
+            //we entitize the & otherwise we end up with &sub being 'interpreted'
             $link .= '&amp;sub=' . str_replace($path, '', $file->getPathname());
         }
         
