@@ -3,14 +3,14 @@
 //Make sure no one trying to be too clever. 
 //This can obviously be done more securely. 
 //maybe we'll just make it id based (well, array index key for now)
-$finalPath = $path = false;
+$finalPath = $requestPath = false;
 if(isset($_GET['path']) && in_array($_GET['path'], $config->paths)) {
-    $finalPath = $path = $_GET['path'];
+    $finalPath = $requestPath = $_GET['path'];
     //Add on subpath if it exists
     if(isset($_GET['sub'])) {
         //COnfirm they aren't trying to break out, like with ../../..
-        $finalPath = realpath($path . $_GET['sub']);
-        if(false === strpos($finalPath, $path)) {
+        $finalPath = realpath($requestPath . $_GET['sub']);
+        if(false === strpos($finalPath, $requestPath)) {
             $finalPath = false;
         }
     }
@@ -44,9 +44,13 @@ if ($finalPath) { ?>
             $link = 'index.php?page=list';
             //Right now, keeping path and subpath
             //path can only be one of the values in $config->paths, and sub is the rest
-            $link .= "&amp;path={$path}";
+            $link .= "&amp;path={$requestPath}";
             //we entitize the & otherwise we end up with &sub being 'interpreted'
-            $link .= '&amp;sub=' . str_replace($path, '', $file->getPathname());
+            $link .= '&amp;sub=' . str_replace($requestPath, '', $file->getPathname());
+        }
+        else {
+            //File. For now, maybe we just assume an .mp4 is playable? Do we need to check this 
+            //html5 ready status?
         }
         
         echo "<li class='{$class}'>";
