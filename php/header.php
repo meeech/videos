@@ -11,4 +11,6 @@ if(!isset($_COOKIE['videos5_user'])) {
 }
 else if(isset($_GET['page'])) {
     $page = $_GET['page'];
+    //Sanitize page
+    $page = pathinfo($page,PATHINFO_BASENAME);
 }
