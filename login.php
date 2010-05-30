@@ -9,8 +9,10 @@ $result = $db->users->where('username', $username)->where('password', $password)
 
 if(false !== $result) {
     setcookie('videos5_user', $result['username'], strtotime('+1 year'));
+    $page = 'home';
     require('views/home.php');
 } else {
+    $page = 'login';
     $login_errors = 'There was an error with your username or password.';
     require('views/login.php');
 }
