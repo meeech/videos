@@ -5,9 +5,9 @@
 //maybe we'll just make it id based (well, array index key for now)
 $finalPath = $requestPath = false;
 if(isset($_GET['path']) && in_array($_GET['path'], $config->paths)) {
-    $finalPath = $requestPath = $_GET['path'];
+    $finalPath = $requestPath = realpath($_GET['path']);
     //Add on subpath if it exists
-    if(isset($_GET['sub'])) {
+    if(isset($_GET['sub']) && $finalPath) {
         //COnfirm they aren't trying to break out, like with ../../..
         $finalPath = realpath($requestPath . $_GET['sub']);
         if(false === strpos($finalPath, $requestPath)) {
@@ -55,7 +55,7 @@ if ($finalPath) { ?>
         
         echo "<li class='{$class}'>";
         echo "<a href='{$link}' class='{$class}'>" . $file->getFilename() . "</a>";
-        echo $link.'<br>';
+        //echo $link.'<br>';
         // echo $file->getPathname().'<br>';
         echo '</li>';
         
