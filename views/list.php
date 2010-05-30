@@ -2,21 +2,32 @@
 //Move to config
 $filesToIgnore = array('.DS_Store');
 
+//This whole chunk is basically to check the incoming path request. 
+//Make sure no one trying to be too clever. 
 //This can obviously be done more securely. 
 //maybe we'll just make it id based (well, array index key for now)
-$path = false;
+$finalPath = $path = false;
 if(isset($_GET['path']) && in_array($_GET['path'], $config->paths)) {
-    $path = $_GET['path'];
+    $finalPath = $path = $_GET['path'];
+    //Add on subpath if it exists
+    if(isset($_GET['sub'])) {
+        //COnfirm they aren't trying to break out, like with ../../..
+        $finalPath = realpath($path . $_GET['sub']);
+        if(false === strpos($finalPath, $path)) {
+            $finalPath = false;
+        }
+    }
 }
+/////
 ?>
 <div>
 <?php require 'views/toolbar.php' ?>
 <?php
-if ($path) { ?>
+if ($finalPath) { ?>
     
     <ul class="videos">
     <?php
-    $ite = new DirectoryIterator($path);
+    $ite = new DirectoryIterator($finalPath);
     foreach ($ite as $file) {
         $fileName = $file->getFilename();
         
@@ -44,7 +55,7 @@ if ($path) { ?>
         
         echo "<li class='{$class}'>";
         echo "<a href='{$link}' class='{$class}'>" . $file->getFilename() . "</a>";
-        // echo $file->getType().'<br>';
+        echo $link.'<br>';
         // echo $file->getPathname().'<br>';
         echo '</li>';
         
