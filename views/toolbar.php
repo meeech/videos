@@ -3,18 +3,20 @@
 <?php
 //if(!isset($page)) { $page = 'home'; }
 $pageTitle = 'Videos';
-$homeButton = false;
-$backButton = false;
+$homeButton = true;
+$backButton = true;
 
 switch ($page) {
     case 'login':
-        $homeButton = true;
+        $backButton = false;
         $pageTitle = 'Login';
     break;
     case 'list':
         $pageTitle = 'Videos - Path';
-        $homeButton = true;
-        $backButton = true;
+    break;
+    case 'home':
+        $homeButton = false;
+        $backButton = false;
     break;
 }
 
