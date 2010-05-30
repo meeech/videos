@@ -1,7 +1,4 @@
 <?php
-//Move to config
-$filesToIgnore = array('.DS_Store');
-
 //This whole chunk is basically to check the incoming path request. 
 //Make sure no one trying to be too clever. 
 //This can obviously be done more securely. 
