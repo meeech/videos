@@ -25,6 +25,7 @@ switch ($page) {
     <?php if ($homeButton): ?>
         <a class="button slideup" href="#home">Home</a>
     <?php endif ?>
+
     <?php if ($backButton): ?>
         <a class="button back slidedown" href="#">Back</a>
     <?php endif ?>

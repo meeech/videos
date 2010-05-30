@@ -1,6 +1,11 @@
 <div>
 <?php require 'views/toolbar.php' ?>
+<ul class="edgetoedge">
+    <li><a class="" href="#">Encode All</a></li>
+</ul>
 <?php
+//Capture output, set up endoce all
+
 //This sets finalPath, requestPath
 extract($helper->getPaths($_GET));
 if ($finalPath) { ?>
@@ -10,16 +15,21 @@ if ($finalPath) { ?>
     $ite = new DirectoryIterator($finalPath);
     foreach ($ite as $file) {
         $fileName = $file->getFilename();
-        
         //Skip any . / .. or any file that begins with . (ie: .DS_Store) - 
         //convention is that these are hidden files anyhow.
         if($file->isDot() || '.' == $fileName[0]) {
             continue;
         }
-
-        $class = 'movie' ;
-        $link = '';
         
+        
+        //@extract
+        //Make the li        
+        $liTemp = '<li class="%1$s">%2$s</li>';
+        $linkTemp = '<a href="%3$s" class="%1$s">%2$s</a>';
+
+        $class = '' ;
+        $link = '';
+
         //Set up link, class for directory
         if($file->isDir()) {
             $class = 'directory';
@@ -31,16 +41,18 @@ if ($finalPath) { ?>
             //we entitize the & otherwise we end up with &sub being 'interpreted'
             $link .= '&amp;sub=' . str_replace($requestPath, '', $file->getPathname());
         }
-        else {
+        elseif ('mp4' == pathinfo($fileName,PATHINFO_EXTENSION)) {
             //File. For now, maybe we just assume an .mp4 is playable? Do we need to check this 
             //html5 ready status?
+            $class = 'movie' ;
+            $link = '';
+        } elseif (in_array(pathinfo($fileName,PATHINFO_EXTENSION), $config->video_extensions)) {
+            $class = 'encodeable';
+            
         }
-        
-        echo "<li class='{$class}'>";
-        echo "<a href='{$link}' class='{$class}'>" . $file->getFilename() . "</a>";
-        //echo $link.'<br>';
-        // echo $file->getPathname().'<br>';
-        echo '</li>';
+
+        $link = sprintf($linkTemp, $class,$fileName,$link);
+        echo sprintf($liTemp, $class, $link);
         
     }
     ?>
@@ -50,4 +62,6 @@ if ($finalPath) { ?>
 else { ?>
     <div class="info">Sorry. Something seems wrong with your path.</div>        
 <?php } ?>
+
+    <?php require 'views/footer.php' ?>
 </div>

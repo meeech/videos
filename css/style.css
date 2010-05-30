@@ -12,6 +12,6 @@
     background-image: url('film.png');
 }    
 
-#jqt ul li a.movie-bad {
-    background-image: url('film_error.png');
+#jqt ul li a.encodeable {
+    background-image: url('add.png');
 }    
