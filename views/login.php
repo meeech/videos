@@ -14,7 +14,7 @@
         <input type="text" name="username" value="<?= $username ?>">
         <label for="password">Password</label>
         <input type="password" name="password" value="1234">
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" class="submit">
     </form>
     
 </div>
