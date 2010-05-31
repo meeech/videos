@@ -11,8 +11,10 @@
     } 
     ?>
     </ul>
-    <!-- <ul class="rounded">
-        <li class="arrow"><a href="views/login.php">Login</a></li>
-    </ul> -->
+
+<ul class="plastic">
+    <li class="arrow"><a href="#page">Favorites</a></li>
+</ul>
+
     <?php require 'views/footer.php' ?>    
 </div>
