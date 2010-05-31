@@ -42,7 +42,7 @@ class Helper {
             //File. For now, maybe we just assume an .mp4 is playable? Do we need to check this 
             //html5 ready status?
             $class = 'movie' ;
-            $link = '';
+            $link = 'index.php?page=play';
         } elseif (in_array(pathinfo($fileName,PATHINFO_EXTENSION), $this->config->video_extensions)) {
             $class = 'encodeable';
             

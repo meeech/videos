@@ -17,11 +17,8 @@ if ($finalPath) { ?>
             continue;
         }
 
-        //@extract
         //Make the li  
         echo $helper->videoLi($file);
-
-        
     }
     ?>
     </ul>
