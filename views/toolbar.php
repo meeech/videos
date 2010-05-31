@@ -8,6 +8,7 @@ $backButton = true;
 
 switch ($page) {
     case 'login':
+        $homeButton = false;
         $backButton = false;
         $pageTitle = 'Login';
     break;
