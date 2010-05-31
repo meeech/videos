@@ -6,19 +6,65 @@ class Helper {
 
     public $config = false;
 
+    public $requestPath = false;
+    
+    public $finalPath = false;
+
     function __construct($config) {
         $this->config = $config;
     }
 
     /**
+     * Generate the LI for a vidoe
+     * @param object $file SplFileInfo
+     * @return string
+     **/
+    function videoLi($file) {
+
+        $liTemp = '<li class="%1$s">%2$s</li>';
+        $linkTemp = '<a href="%3$s" class="%1$s">%2$s</a>';
+
+        $class = $link = '';
+        $fileName = $file->getFilename();
+        
+        //Set up link, class for directory
+        if($file->isDir()) {
+            $class = 'directory';
+            //BUild up the link.
+            //Right now, keeping path and subpath
+            //path can only be one of the values in $config->paths, and sub is the rest
+            $link = 'index.php?page=list';
+            $link .= "&amp;path={$this->requestPath}";
+            //we entitize the & otherwise we end up with &sub being 'interpreted'
+            $link .= '&amp;sub=' . str_replace($this->requestPath, '', $file->getPathname());
+        }
+        elseif ('mp4' == pathinfo($fileName,PATHINFO_EXTENSION)) {
+            //File. For now, maybe we just assume an .mp4 is playable? Do we need to check this 
+            //html5 ready status?
+            $class = 'movie' ;
+            $link = '';
+        } elseif (in_array(pathinfo($fileName,PATHINFO_EXTENSION), $this->config->video_extensions)) {
+            $class = 'encodeable';
+            
+        }
+
+        $link = sprintf($linkTemp, $class,$fileName,$link);
+        echo sprintf($liTemp, $class, $link);
+    }
+
+    /**
      * Used to calculate the final and request path. 
+     * sets those helper propeties at the same time.
      *
      * This whole chunk is basically to check the incoming path request. 
      * Make sure no one trying to be too clever. This can prolly be done more securely.
      * Maybe we'll just make path id based (well, array index key for now)
-     *
+     * 
      * @param array $get The $_GET array
-     * @return array finalPath, requestPath
+     * @return array 
+     *          requestPath => path that maps to one in the settings
+     *          finalPath =>  requestPath + subpath (path to the movie/directory)
+     *
      **/
     function getPaths($get) {
         
@@ -34,6 +80,10 @@ class Helper {
                 }
             }
         }
+
+        $this->requestPath = $requestPath;
+        $this->finalPath = $finalPath;
+
         return compact('finalPath','requestPath');
     }
 
