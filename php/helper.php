@@ -38,7 +38,7 @@ class Helper {
             //we entitize the & otherwise we end up with &sub being 'interpreted'
             $link .= '&amp;sub=' . str_replace($this->requestPath, '', $file->getPathname());
         }
-        elseif ('mp4' == pathinfo($fileName,PATHINFO_EXTENSION)) {
+        elseif (('mp4' == pathinfo($fileName,PATHINFO_EXTENSION) ) || ('m4v' == pathinfo($fileName,PATHINFO_EXTENSION))) {
             //File. For now, maybe we just assume an .mp4 is playable? Do we need to check this 
             //html5 ready status?
             $class = 'movie' ;
