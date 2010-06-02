@@ -12,9 +12,13 @@
     ?>
     </ul>
 
-<ul class="plastic">
-    <li class="arrow"><a href="#page">Favorites</a></li>
-</ul>
+<!-- features to add -->
+
+<!--
+<ul>
+    <li><a href="#page">Favorites</a></li>
+</ul> 
+-->
 
     <?php require 'views/footer.php' ?>    
 </div>
