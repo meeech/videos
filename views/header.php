@@ -15,6 +15,8 @@
         });
     </script>
     <style type="text/css" media="screen">@import "css/style.css";</style> 
+    <script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+
 </head>
 <body>
 <div id="jqt">

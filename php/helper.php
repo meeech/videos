@@ -45,7 +45,7 @@ class Helper {
             $link = 'index.php?page=play';
         } elseif (in_array(pathinfo($fileName,PATHINFO_EXTENSION), $this->config->video_extensions)) {
             $class = 'encodeable';
-            
+            $link = 'queue.php?file='.$this->finalPath.'/'.$fileName;
         }
 
         $link = sprintf($linkTemp, $class,$fileName,$link);
