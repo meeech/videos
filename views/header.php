@@ -10,7 +10,8 @@
 
     <script type="text/javascript" charset="utf-8">
         var jQT = new $.jQTouch({
-            // 'formSelector': 'form' 
+            //Be specific about what forms we want jqtouch to handle vs my own handling
+            'formSelector': 'form.jqt'
         });
     </script>
     <style type="text/css" media="screen">@import "css/style.css";</style> 
