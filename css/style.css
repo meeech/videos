@@ -15,3 +15,10 @@
 #jqt ul li a.encodeable {
     background-image: url('add.png');
 }    
+
+.util-hide {
+    display:none;
+}
+.hide {
+    display:none;
+}

@@ -1,5 +1,4 @@
 <div class="toolbar">
-
 <?php
 //if(!isset($page)) { $page = 'home'; }
 $pageTitle = 'Videos';
@@ -28,9 +27,10 @@ switch ($page) {
     <?php if ($homeButton): ?>
         <a class="button slideup" href="#home">Home</a>
     <?php endif ?>
+    <div class="util-hide spinner">Spinner</div>
 
     <?php if ($backButton): ?>
-        <a class="button back slidedown" href="#">Back</a>
+        <!-- <a class="button back slidedown" href="#">Back</a> -->
     <?php endif ?>
 
 
