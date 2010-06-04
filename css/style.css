@@ -16,9 +16,14 @@
     background-image: url('add.png');
 }    
 
+.spinner {
+    position:absolute;
+    opacity: 0.5;
+    top:10px;
+    left: 100px;
+}
+
 .util-hide {
     display:none;
 }
-.hide {
-    display:none;
-}
+
