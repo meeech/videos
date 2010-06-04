@@ -16,6 +16,11 @@
     background-image: url('add.png');
 }    
 
+#jqt ul li a.queued {
+    background-image: url('clock.png');
+}    
+
+
 .spinner {
     position:absolute;
     opacity: 0.5;
