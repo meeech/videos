@@ -26,9 +26,8 @@ class Helper {
 
         $class = $link = '';
         $fileName = $file->getFilename();
-        
-        //Set up link, class for directory
-        if($file->isDir()) {
+
+        if($file->isDir()) { //Set up link, class for directory
             $class = 'directory';
             //BUild up the link.
             //Right now, keeping path and subpath
@@ -39,11 +38,11 @@ class Helper {
             $link .= '&amp;sub=' . str_replace($this->requestPath, '', $file->getPathname());
         }
         elseif (('mp4' == pathinfo($fileName,PATHINFO_EXTENSION) ) || ('m4v' == pathinfo($fileName,PATHINFO_EXTENSION))) {
-            //File. For now, maybe we just assume an .mp4 is playable? Do we need to check this 
-            //html5 ready status?
+            //File. For now, maybe we just assume an .mp4 is playable? Do we need to check this html5 ready status?
             $class = 'movie' ;
             $link = 'index.php?page=play';
-        } elseif (in_array(pathinfo($fileName,PATHINFO_EXTENSION), $this->config->video_extensions)) {
+        } 
+        elseif (in_array(pathinfo($fileName,PATHINFO_EXTENSION), $this->config->video_extensions)) {
             $class = 'encodeable';
             $link = 'queue.php?file='.$this->finalPath.'/'.$fileName;
         }
