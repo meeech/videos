@@ -5,13 +5,15 @@
 class Helper {
 
     public $config = false;
-
+    public $db = false;
+    
     public $requestPath = false;
     
     public $finalPath = false;
 
-    function __construct($config) {
+    function __construct($config, $db) {
         $this->config = $config;
+        $this->db = $db;
     }
 
     /**
@@ -29,8 +31,7 @@ class Helper {
 
         if($file->isDir()) { //Set up link, class for directory
             $class = 'directory';
-            //BUild up the link.
-            //Right now, keeping path and subpath
+            //BUild up the link. Right now, keeping path and subpath
             //path can only be one of the values in $config->paths, and sub is the rest
             $link = 'index.php?page=list';
             $link .= "&amp;path={$this->requestPath}";
@@ -43,8 +44,9 @@ class Helper {
             $link = 'index.php?page=play';
         } 
         elseif (in_array(pathinfo($fileName,PATHINFO_EXTENSION), $this->config->video_extensions)) {
-            $class = 'encodeable';
-            $link = 'queue.php?file='.$this->finalPath.'/'.$fileName;
+            $fullFilePath = $this->finalPath.'/'.$fileName;
+            $class = ( $this->db->queue('file = ?', $fullFilePath)->count() ) ? 'queued' : 'encodeable' ;
+            $link = 'queue.php?file='.$fullFilePath;
         }
 
         $link = sprintf($linkTemp, $class,$fileName,$link);
@@ -287,5 +289,8 @@ class Helper {
 
 }
 
-//Right now, we assume config is always available - thats the pattern
-$helper = new Helper($config);
+//Right now, we assume config always available - thats the pattern
+if(!isset($db)) {
+    $db = false;
+}
+$helper = new Helper($config, $db);
