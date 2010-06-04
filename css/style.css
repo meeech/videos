@@ -20,8 +20,8 @@
     background-image: url('clock.png');
 }    
 
-
-.spinner {
+/* Will eventually be positioned near the click that activated it. */
+#spinner {
     position:absolute;
     opacity: 0.5;
     top:10px;
