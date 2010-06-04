@@ -12,12 +12,11 @@ Y.one('#jqt').delegate('click', function(e) {
 
 }, 'a.encodeable');
 
-//using all due to gotcha about using #id based elementin the jqtouch cards.
 Y.on('io:start', function() {
-    Y.all('.spinner').removeClass('util-hide');
+    Y.one('#spinner').removeClass('util-hide');
 });
 Y.on('io:complete', function() {
-    Y.all('.spinner').addClass('util-hide');
+    Y.one('#spinner').addClass('util-hide');
 });
 
 //end closure
