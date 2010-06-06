@@ -11,13 +11,23 @@ class Config {
     var $username = 'videos5';
     var $password = 'videos5';
     
-    //Path to folders we want to look for videos
-    //Can be anywhere accessible to the script
+    
+    /**
+     * Path to folders we want to look for videos 
+     * Can be anywhere accessible to the script
+     * 
+     * NOTE: All dirs in the path must be accessible to the script, not just the destination.
+     * Seems to be limitation/sec feature of realpath and DirectoryIterator 
+     * Same deal with any symlinks
+     *
+     * @todo look into allow http/ftp/ access?
+     * @author Mitchell Amihod
+     */
     //
-    //@todo look into allow http/ftp/ access?
     var $paths = array(
         '/Users/mitch/Sites/videos5/dropbox',
         '/Users/mitch/Sites/videos',
+        // '/Users/mitch/videos',
         '/Users/mitch/Desktop/tmp/Glee'
     );
 

@@ -90,6 +90,8 @@ class Helper {
      * Maybe we'll just make path id based (well, array index key for now)
      * 
      * @todo / limitation realpath will return false if script doesnt have access to all folder in the chain it checks. 
+     *          Tried to get around it with symlinking and whatnow, but many checks fail, and dir iterator seems to fail 
+     *          in the same fashion. 
      *
      * @param array $get The $_GET array
      * @return array 
@@ -102,10 +104,15 @@ class Helper {
         $finalPath = $requestPath = false;
         if(isset($get['path']) && in_array($get['path'], $this->config->paths)) {
             $finalPath = $requestPath = realpath($get['path']);
+
             //Add on subpath if it exists
             if(isset($get['sub']) && $finalPath) {
-                //COnfirm they aren't trying to break out, like with ../../..
-                $finalPath = realpath($requestPath . $get['sub']);
+                $fileinfo = new SplFileInfo($requestPath . $get['sub']);
+                $finalPath = $fileinfo->getPathname();
+                if($fileinfo->isLink()) {
+                    $finalPath = $fileinfo->getPathname();
+                }
+    
                 if(false === strpos($finalPath, $requestPath)) {
                     $finalPath = false;
                 }
