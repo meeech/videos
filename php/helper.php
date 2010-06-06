@@ -16,6 +16,26 @@ class Helper {
         $this->db = $db;
     }
 
+    
+    /**
+     * Generate video tag(s)
+     * @param array $get $_GET
+     * @return string
+     **/
+    function video($get) {
+        //@todo Need path checking, make sure its allowable. will prolly have to scan config::paths
+        //$inpath = in_array(pathinfo($get['file'],PATHINFO_DIRNAME), $this->config->paths());
+        if(!isset($get['file']) || !file_exists($get['file'])) {
+            return '<div class="info">You have no access to this file.</div>';
+        }
+        
+        //Make symlink
+        $videoTemp = '<video id="video" src="%1$s" autobuffer autoplay controls></video>';
+        
+        return sprintf($videoTemp, $get['file']);
+        
+    }
+
     /**
      * Generate the LI for a vidoe
      * @param object $file SplFileInfo
@@ -28,7 +48,8 @@ class Helper {
 
         $class = $link = '';
         $fileName = $file->getFilename();
-
+        $fullFilePath = $this->finalPath.'/'.$fileName;
+    
         if($file->isDir()) { //Set up link, class for directory
             $class = 'directory';
             //BUild up the link. Right now, keeping path and subpath
@@ -41,10 +62,9 @@ class Helper {
         elseif (('mp4' == pathinfo($fileName,PATHINFO_EXTENSION) ) || ('m4v' == pathinfo($fileName,PATHINFO_EXTENSION))) {
             //File. For now, maybe we just assume an .mp4 is playable? Do we need to check this html5 ready status?
             $class = 'movie' ;
-            $link = 'index.php?page=play';
+            $link = 'index.php?page=play&amp;file='.$fullFilePath;
         } 
         elseif (in_array(pathinfo($fileName,PATHINFO_EXTENSION), $this->config->video_extensions)) {
-            $fullFilePath = $this->finalPath.'/'.$fileName;
             $class = ( $this->db->queue('file = ?', $fullFilePath)->count() ) ? 'queued' : 'encodeable' ;
             $link = 'queue.php?file='.$fullFilePath;
         }
