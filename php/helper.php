@@ -57,8 +57,8 @@ class Helper {
         $class = $link = '';
         $fileName = $file->getFilename();
         $fullFilePath = $this->finalPath.'/'.$fileName;
-    
-        if($file->isDir()) { //Set up link, class for directory
+
+        if($file->isDir() || $file->isLink()) { //Set up link, class for directory
             $class = 'directory';
             //BUild up the link. Right now, keeping path and subpath
             //path can only be one of the values in $config->paths, and sub is the rest
@@ -89,6 +89,8 @@ class Helper {
      * Make sure no one trying to be too clever. This can prolly be done more securely.
      * Maybe we'll just make path id based (well, array index key for now)
      * 
+     * @todo / limitation realpath will return false if script doesnt have access to all folder in the chain it checks. 
+     *
      * @param array $get The $_GET array
      * @return array 
      *          requestPath => path that maps to one in the settings
