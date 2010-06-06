@@ -28,7 +28,7 @@ class Config {
         '/Users/mitch/Sites/videos5/dropbox',
         '/Users/mitch/Sites/videos',
         // '/Users/mitch/videos',
-        '/Users/mitch/Desktop/tmp/Glee'
+        // '/Users/mitch/Desktop/tmp/Glee'
     );
 
     var $symlinks = 'videos';

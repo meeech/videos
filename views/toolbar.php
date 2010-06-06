@@ -18,6 +18,9 @@ switch ($page) {
         $homeButton = false;
         $backButton = false;
     break;
+    default:
+        $pageTitle = ucfirst($page);
+    break;
 }
 
 ?>
