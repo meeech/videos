@@ -29,10 +29,18 @@ class Helper {
             return '<div class="info">You have no access to this file.</div>';
         }
         
+        if (!is_dir($this->config->symlinks())) {
+            if(! @mkdir($this->config->symlinks())){
+                echo 'Unable to make symlink dir.';
+            }
+        }
+
+        $web_file = 'videos/' . md5($_SERVER['REMOTE_ADDR']) . '.' . pathinfo($get['file'],PATHINFO_EXTENSION);
+        @unlink($web_file);
+        symlink($get['file'], $web_file);
         //Make symlink
         $videoTemp = '<video id="video" src="%1$s" autobuffer autoplay controls></video>';
-        
-        return sprintf($videoTemp, $get['file']);
+        return sprintf($videoTemp, $web_file);
         
     }
 
