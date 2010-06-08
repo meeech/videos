@@ -58,6 +58,8 @@ class Helper {
         $fileName = $file->getFilename();
         $fullFilePath = $this->finalPath.'/'.$fileName;
 
+        //@need to fix, based on use case in the end I think.
+        //We have issue with symlinks vs reallinks. Will experiment @ later date
         if($file->isDir() || $file->isLink()) { //Set up link, class for directory
             $class = 'directory';
             //BUild up the link. Right now, keeping path and subpath
@@ -77,8 +79,12 @@ class Helper {
             $link = 'queue.php?file='.$fullFilePath;
         }
 
-        $link = sprintf($linkTemp, $class,$fileName,$link);
-        echo sprintf($liTemp, $class, $link);
+        if(!empty($link)) {
+            $link = sprintf($linkTemp, $class,$fileName,$link);
+            return sprintf($liTemp, $class, $link);
+        }
+        
+        return '';
     }
 
     /**
