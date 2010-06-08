@@ -1,4 +1,5 @@
-#jqt ul.videos li a {
+#jqt ul.videos li a,
+div#encode-queue ul li {
     background-position: 5px 15px;
     background-repeat: no-repeat;
     padding-left: 23px;
@@ -19,6 +20,17 @@
 #jqt ul li a.queued {
     background-image: url('clock.png');
 }    
+
+div#encode-queue ul li.error {
+    background-position: 5px 15px;
+    background-repeat: no-repeat;
+    padding-left: 23px;
+    background-image: url('error.png');
+}
+
+div#encode-queue ul li.error {
+    background-image: url('error.png');
+}
 
 div.small {
     font-size: .7em;
