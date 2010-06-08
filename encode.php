@@ -30,6 +30,8 @@ set_time_limit(0);
 //And so we dont have worry about how big db gets.
 $file = false;
 do {
+    //Trunc the log file. We only want fresh info.
+    file_put_contents($config->encodeLog,'');
     
     //Remember - using fetch just grabs the first record in this result. 
     //Batch size is currently being ignored. 
@@ -75,7 +77,6 @@ do {
     }
 
     sleep(1);
-// } while ($file);
-} while (false);
+} while ($file);
 
 echo "\nDone";

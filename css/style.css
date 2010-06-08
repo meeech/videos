@@ -21,15 +21,15 @@ div#encode-queue ul li {
     background-image: url('clock.png');
 }    
 
+div#encode-queue ul li {
+    background-image: url('clock.png');    
+}
 div#encode-queue ul li.error {
-    background-position: 5px 15px;
-    background-repeat: no-repeat;
-    padding-left: 23px;
     background-image: url('error.png');
 }
 
-div#encode-queue ul li.error {
-    background-image: url('error.png');
+div#encode-queue ul li.encoding {
+    background-image: url('hourglass.png');
 }
 
 div.small {

@@ -32,6 +32,8 @@ class Config {
         // '/Users/mitch/Desktop/tmp/Glee'
     );
 
+    //Folder where the web server will generate symlinks to the videos it need to deliver.
+    //This allows files outside the webroot.
     var $symlinks = 'videos';
 
     //Binaries
@@ -54,6 +56,15 @@ class Config {
      **/
     var $encode_command = '/usr/bin/nice /usr/local/bin/HandBrakeCLI -L -i %1$s -o %2$s -e x264 -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -X 720 -Y 480 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6';
 
+    //
+    //We scrape this for encoding information.
+    /**
+     * This is where your encode cron job ought to be piping its content.
+     * ie: set up your cron job like so: ./encode.php > logs/encoding.log 
+     *
+     * @var string
+     */
+    var $encodeLog = 'logs/encoding.log';
 
     /**
      * List of file types to offer to encode.
