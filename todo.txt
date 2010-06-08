@@ -1,1 +1,2 @@
-* ratings
+* Make video stop on back. RIght now, it just hides, but keeps playing
+* re-implement ratings
