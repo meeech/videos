@@ -27,6 +27,7 @@ class Config {
     var $paths = array(
         '/Users/mitch/Sites/videos5/dropbox',
         '/Users/mitch/Sites/videos',
+        '/Volumes/Yargh (I)'
         // '/Users/mitch/videos',
         // '/Users/mitch/Desktop/tmp/Glee'
     );
