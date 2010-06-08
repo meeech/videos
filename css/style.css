@@ -20,6 +20,10 @@
     background-image: url('clock.png');
 }    
 
+div.small {
+    font-size: .7em;
+}
+
 /* Will eventually be positioned near the click that activated it. */
 #spinner {
     position:absolute;

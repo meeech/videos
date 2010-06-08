@@ -1,13 +1,13 @@
 <div>
 <?php require 'views/toolbar.php' ?>
-<ul class="edgetoedge">
+<ul class="rounded">
     <li><a class="" href="#">Encode All</a></li>
 </ul>
 <?php
 //Capture output, set up endoce all
 extract($helper->getPaths($_GET));
 if ($finalPath) { ?>    
-    <ul class="videos">
+    <ul class="videos edgetoedge">
     <?php
     $ite = new DirectoryIterator($finalPath);
     foreach ($ite as $file) {
