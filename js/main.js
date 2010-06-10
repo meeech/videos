@@ -24,6 +24,15 @@ Y.on('io:complete', function() { Y.one('#spinner').addClass('util-hide'); });
 });});
 
 $(document).ready(function(e){        
+    // Kk. The other trick is to use live instead of bind for panels you loading via ajax
+    $('#encode-queue').live('pageAnimationStart', function(e,data) {
+        if('in' == data.direction) {
+            console.log('equeue page incoming');            
+        } else {
+            console.log('eq page out - stop updating');
+        }
+
+    });
 
     // Code to deal with the video playing to stop it.
     // @bug / gotcha
