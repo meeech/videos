@@ -1,5 +1,8 @@
+
 YUI().use('substitute','node','event','io-base','json-parse', function(Y) { Y.on("domready", function() { 
 //BEGIN Y closure
+
+//Queues up an item to encode.
 Y.one('#jqt').delegate('click', function(e) {
     e.halt();
     if(this.hasClass('encodeable')) {
@@ -20,20 +23,23 @@ Y.one('#jqt').delegate('click', function(e) {
 Y.on('io:start', function() { Y.one('#spinner').removeClass('util-hide'); });
 Y.on('io:complete', function() { Y.one('#spinner').addClass('util-hide'); });
 
+// One trick is to use live instead of bind for panels you loading via ajax
+$('#encode-queue').live('pageAnimationStart', function(e,data) {
+    if('in' == data.direction) {
+        console.log('in');
+    } else {
+        //Hmm, maybe we dont want to bother turning it off till done. why shouldnt we update the info the bg.
+//            console.log('eq page out - stop updating');
+    }
+
+});
+
+
+
 //end closure
 });});
 
 $(document).ready(function(e){        
-    // Kk. The other trick is to use live instead of bind for panels you loading via ajax
-    $('#encode-queue').live('pageAnimationStart', function(e,data) {
-        if('in' == data.direction) {
-            console.log('equeue page incoming');            
-        } else {
-            console.log('eq page out - stop updating');
-        }
-
-    });
-
     // Code to deal with the video playing to stop it.
     // @bug / gotcha
     // Spent about an hour in chrome trying to figure out why this wasn't working.
