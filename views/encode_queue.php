@@ -28,9 +28,9 @@ if(isset($_GET['type']) && 'json' == $_GET['type']) {
         ?>
         <li class="<?=$class?>">
             <?php if ($percentDone): ?>
-                <div class="percent-done"><?=$percentDone?>%</div>
+                <div class="percent-done">0</div>
             <?php endif ?>
-            <?= trim(basename($qItem['file'])); ?><div class="small"><?= dirname($qItem['file'])?></div>
+            <span class="name"><?= trim(basename($qItem['file'])); ?></span><div class="small"><?= dirname($qItem['file'])?></div>
         </li>
     <?php endforeach ?>
     

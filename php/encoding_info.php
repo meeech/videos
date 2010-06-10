@@ -5,6 +5,7 @@ $logInfo = explode( "\r",file_get_contents($config->encodeLog));
 preg_match('/ -i \'(.*)\' -o /', current($logInfo), $regs);
 $nowEncoding = array();
 if( !empty($regs) && isset($regs[1]) ) {
+    $nowEncoding['basename'] = basename($regs[1]);
     $nowEncoding['filename'] = $regs[1];
 }
 //If we can extract this, we can poll and update...
