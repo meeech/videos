@@ -1,5 +1,5 @@
 
-YUI().use('substitute','node','event','io-base','json-parse','datasource-get', 'datasource-jsonschema', 'datasource-polling', 'dump', function(Y) { Y.on("domready", function() { 
+YUI().use('substitute','node','event','io-base','json-parse','datasource-function', 'datasource-polling', 'dump', function(Y) { Y.on("domready", function() { 
 //BEGIN Y closure
 
 //Queues up an item to encode.
@@ -23,52 +23,22 @@ Y.one('#jqt').delegate('click', function(e) {
 Y.on('io:start', function() { Y.one('#spinner').removeClass('util-hide'); });
 Y.on('io:complete', function() { Y.one('#spinner').addClass('util-hide'); });
 
-var reqId,
-myFunction = function() {
-    return new Date();
-},
-myDataSource = new Y.DataSource.Get({source:'index.php?page=encode_queue&type=json'}),
-request = {
-    // source: 'index.php?page=encode_queue&type=json',
-    callback: {
-        success: function(e){
-            console.log(e.response);
-            //var rText = Y.JSON.parse(response.responseText);
-            //Y.one('li.encoding .percent-done').setContent(rText.percent);
-
-            // Y.one("#demo_output_polling")
-            //  .setContent("At the tone the time will be: " +
-            //             Y.dump(e.response.results[0].toString()));
-        },
-        failure: function(e){
-            console.log(e.response);
-            // Y.one("#demo_output_polling")
-            //  .setContent("Could not retrieve data: " + e.error.message);
-        }
-    }
-};
-
-myDataSource.plug(Y.Plugin.DataSourceJSONSchema, {
-    schema: {
-        resultListLocator: "query.results.result",
-        resultFields: ["basename"]
-    }
-});
-
-
 // One trick is to use live instead of bind for panels you loading via ajax
 $('#encode-queue').live('pageAnimationEnd', function(e,data) {
     if('in' == data.direction) {
-        console.log('in');
-        reqId = myDataSource.setInterval(3000, request);        
+        // console.log(this);
+        Y.io('index.php?page=encode_queue&type=json',{
+            'on': {
+                'success' : function(tId, response, args) {
+                    var rText = Y.JSON.parse(response.responseText);
+                    Y.one('li.encoding .percent-done').setContent(rText.percent);
+                }
+            }
+        });
+        
     } else {
         //Hmm, maybe we dont want to bother turning it off till done. why shouldnt we update the info the bg.
-        //console.log('eq page out - stop updating');
-        console.log('out');
-        myDataSource.clearInterval(reqId);
-        // 
-        // myDataSource.setInterval(1000, request);
-
+//            console.log('eq page out - stop updating');
     }
 
 });
