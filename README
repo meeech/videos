@@ -3,7 +3,8 @@ myVideos5 README
 
 * Everything is set to default .mp4 - Will see if we need to broaden that.
 
-
+* log folder - should be readable/writeable for the webapp.
+	    * * * * * /usr/bin/php /var/www/videos5/encode.php >> /var/www/videos5/logs/encoding.log 2>&1
 Videos5 README
 ==============
 
