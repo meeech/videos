@@ -28,9 +28,13 @@ if(isset($_GET['type']) && 'json' == $_GET['type']) {
         ?>
         <li class="<?=$class?>">
             <?php if ($percentDone): ?>
-                <div class="percent-done">0</div>
+                <!-- @bookmark  When cancel, set error code, so encode can move onto next one. -->
+                <div class="cancel-button"><a href="encode.php?cancel" class="redButton">Cancel</a></div>
+                <div class="percent-done"><?= $percentDone ?>%</div>
+                
             <?php endif ?>
-            <span class="name"><?= trim(basename($qItem['file'])); ?></span><div class="small"><?= dirname($qItem['file'])?></div>
+            <span class="name"><?= trim(basename($qItem['file'])); ?></span>
+            <div class="small"><?= dirname($qItem['file'])?></div>
         </li>
     <?php endforeach ?>
     

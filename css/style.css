@@ -36,6 +36,19 @@ div.small {
     font-size: .7em;
 }
 
+#jqt div.cancel-button {
+    position: absolute;
+    right: 20px;
+    margin-top: 10px;
+}
+
+#jqt div.cancel-button a.redButton {
+    border-width: 0 9px;
+    padding: 6px 0px;
+    font-size: .7em;
+    width: 60px;
+}
+
 /* Will eventually be positioned near the click that activated it. */
 #spinner {
     position:absolute;

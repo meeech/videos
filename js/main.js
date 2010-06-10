@@ -31,7 +31,7 @@ request = {
     callback: {
         success: function(e){
             var rText = Y.JSON.parse(e.data.responseText);
-            Y.one('li.encoding .percent-done').setContent(rText.percent);
+            Y.one('li.encoding .percent-done').setContent(rText.percent+'%');
         },
         failure: function(e){
             console.log('fail');

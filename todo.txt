@@ -1,2 +1,6 @@
-* Make video stop on back. RIght now, it just hides, but keeps playing
 * re-implement ratings
+* reorder cue
+* bump queue item up
+* delete/move old copy.
+x Make video stop on back. RIght now, it just hides, but keeps playing
+
