@@ -39,7 +39,7 @@ class Helper {
         @unlink($web_file);
         symlink($get['file'], $web_file);
         //Make symlink
-        $videoTemp = '<video id="video" src="%1$s" autobuffer autoplay controls></video>';
+        $videoTemp = '<video src="%1$s" autobuffer autoplay controls></video>';
         return sprintf($videoTemp, $web_file);
         
     }
