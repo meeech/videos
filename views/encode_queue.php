@@ -1,4 +1,16 @@
 <?php require_once 'php/encoding_info.php'; ?>
+<?php
+
+/* AJAX check  */
+if(isset($_GET['type']) && 'json' == $_GET['type']) {
+    header('Content-type: text/json');
+    echo json_encode($nowEncoding);
+    die();
+}
+
+/* not ajax, do more.... */
+
+?>
 <div id="encode-queue">
 <?php require 'views/toolbar.php' ?>
 <ul class="edgetoedge">
@@ -16,7 +28,7 @@
         ?>
         <li class="<?=$class?>">
             <?php if ($percentDone): ?>
-                <div class="percent-done"><?=$percentDone?>%</div>                
+                <div class="percent-done"><?=$percentDone?>%</div>
             <?php endif ?>
             <?= trim(basename($qItem['file'])); ?><div class="small"><?= dirname($qItem['file'])?></div>
         </li>
