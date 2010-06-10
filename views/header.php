@@ -23,4 +23,4 @@
 </head>
 <body>
 <div id="jqt">
-<!-- end header-->
+<!-- end header.php-->

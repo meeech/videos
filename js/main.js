@@ -22,3 +22,37 @@ Y.on('io:complete', function() { Y.one('#spinner').addClass('util-hide'); });
 
 //end closure
 });});
+
+$(document).ready(function(e){        
+
+    // Code to deal with the video playing to stop it.
+    // @bug / gotcha
+    // Spent about an hour in chrome trying to figure out why this wasn't working.
+    // Turns out chrome hasn't implemented  video.pause(), so thats why it was failing.
+    // So, on chrome, the video will keep playing in the background unless you explicitly
+    // stop it. As this is mainly aimed at mobile, thats a limitation we can live with for now.
+    $('#jqt').bind('pageAnimationStart', function(e, data){
+        var currentpage = $($('.current').get(0));
+        if(!currentpage.hasClass('player')) {
+            return true;
+        }
+
+        if('out' == data.direction) {
+            //Hmm, thought since currentpage is a $, then i could currentpage(selector)
+            $('video',currentpage).get(0).pause();
+        } 
+        return true;
+    });
+    
+    //IF we need to, this would be the place to cache the video.
+    // $('#jqt').bind('pageAnimationEnd', function(e, data){
+    //     var currentpage = $($('.current').get(0));
+    //     if(!currentpage.hasClass('player')) {
+    //         return true;
+    //     }
+    // 
+    //     if('in' == data.direction) {
+    //         console.log('cache currently playng video');            
+    //     }
+    // });
+ });
