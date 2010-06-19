@@ -1,16 +1,22 @@
-myVideos5 README
+videos README
 ================
+
+Not ready for prime time. It works though. 
+Start with php/config.php.
 
 Requirements
 ------------
 
 tested with php >= 5.2 , mysql, httpd, HandBrake-cli
+uses NotORM - http://www.notorm.com/
 
 About
 -----
 
 Based off Videos5 ( http://code.google.com/p/videos5/ ). 
+
 I liked the idea, but wasn't crazy about the implementation, and could use the practice.
+
 So, there you have it.
 
 * Everything is set to default .mp4 - Will see if we need to broaden that.
