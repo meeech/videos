@@ -1,3 +1,4 @@
+make login form nice
 * re-implement ratings
 * reorder cue
 * bump queue item up

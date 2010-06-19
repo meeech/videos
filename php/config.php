@@ -21,13 +21,13 @@ class Config {
      * Same deal with any symlinks
      *
      * @todo look into allow http/ftp/ access?
-     * @author Mitchell Amihod
      */
     //
     var $paths = array(
         '/Users/mitch/Sites/videos5/dropbox',
         '/Users/mitch/Sites/videos',
-        '/Volumes/Yargh (I)'
+        '/Volumes/Yargh (I)',
+        '/Users/mitch/gource'
         // '/Users/mitch/videos',
         // '/Users/mitch/Desktop/tmp/Glee'
     );
@@ -56,8 +56,6 @@ class Config {
      **/
     var $encode_command = '/usr/bin/nice /usr/local/bin/HandBrakeCLI -L -i %1$s -o %2$s -e x264 -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -X 720 -Y 480 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6';
 
-    //
-    //We scrape this for encoding information.
     /**
      * This is where your encode cron job ought to be piping its content.
      * ie: set up your cron job like so: ./encode.php > logs/encoding.log 
@@ -74,7 +72,7 @@ class Config {
     var $video_extensions = array('m4v', 'mp4', 'ts', 'mov', 'divx', 'xvid', 'vob', 'm2v', 'avi', 'mpg', 'mpeg', 'mkv', 'm2t', 'm2ts');
 
     /**
-     * undocumented class variable
+     * Output/playable
      *
      * @var string
      **/

@@ -26,17 +26,17 @@ Y.on('io:complete', function() { Y.one('#spinner').addClass('util-hide'); });
 //This would be a good simple example. turns out you dont need the plug in for basic io polling.
 // @todo do a check on the name as well to see if its new one.
 var reqId,
-myDataSource = new Y.DataSource.IO({source:'index.php?page=encode_queue&type=json'}),
-request = {
-    callback: {
-        success: function(e){
-            var rText = Y.JSON.parse(e.data.responseText);
-            Y.one('li.encoding .percent-done').setContent(rText.percent+'%');
-        },
-        failure: function(e){
-            console.log('fail');
+    myDataSource = new Y.DataSource.IO({source:'index.php?page=encode_queue&type=json'}),
+    request = {
+        callback: {
+            success: function(e){
+                var rText = Y.JSON.parse(e.data.responseText);
+                Y.one('li.encoding .percent-done').setContent(rText.percent+'%');
+            },
+            failure: function(e){
+                console.log('fail');
+            }
         }
-    }
 };
 
 // One trick is to use live instead of bind for panels you loading via ajax
@@ -54,9 +54,7 @@ $('#encode-queue').live('pageAnimationEnd', function(e,data) {
 
 });
 
-
-
-//end closure
+//end Y closure
 });});
 
 $(document).ready(function(e){        
@@ -78,16 +76,4 @@ $(document).ready(function(e){
         } 
         return true;
     });
-    
-    //IF we need to, this would be the place to cache the video.
-    // $('#jqt').bind('pageAnimationEnd', function(e, data){
-    //     var currentpage = $($('.current').get(0));
-    //     if(!currentpage.hasClass('player')) {
-    //         return true;
-    //     }
-    // 
-    //     if('in' == data.direction) {
-    //         console.log('cache currently playng video');            
-    //     }
-    // });
- });
+});

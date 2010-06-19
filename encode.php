@@ -22,10 +22,6 @@ if($encoder->is_running()) {
 //No time limit on the encoding process
 set_time_limit(0);
 
-//Debug
-// $row = $db->videos[13]->update(array('encode'=>1, 'error'=>0));
-//////
-
 //Basic idea is we're doing a batch at a time so we don't overload server, 
 //And so we dont have worry about how big db gets.
 $file = false;
