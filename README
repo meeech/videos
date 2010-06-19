@@ -19,83 +19,8 @@ I liked the idea, but wasn't crazy about the implementation, and could use the p
 
 So, there you have it.
 
-* Everything is set to default .mp4 - Will see if we need to broaden that.
+* Everything is set to default .mp4/.m4v - Will see if we need to broaden that.
 
 * logs folder - should be readable/writeable for the webapp.
-    * * * * * /usr/bin/php /var/www/videos5/encode.php >> /var/www/videos5/logs/encoding.log 2>&1
+    * * * * * /usr/bin/php  /path/to/app/encode.php >> /path/to/app/logs/encoding.log 2>&1
 
-Videos5 README
-==============
-
-Requirements
-------------
-
-php php-mbstring mysql php-mysql mplayer HandBrake-cli mediainfo httpd
-
-
-Installation
-------------
-
-1. Create a empty MySQL database, and a user that can read & write in it.
-
-2. Import schema-mysql.sql into your new database.
-
-3. Configure the path(s) where your videos are stored in the settings table.
-   Edit the row where name = 'paths'; one path per line, i.e. line-feed (\n) 
-   separated values.
-
-4. In your httpd (Apache or other) configuration, make sure .mp4 and .mov 
-   files are served with the correct content-type:
-   For example, you could all those to the VirtualHost section of your 
-   httpd.conf (or httpd.d/xxx.conf) file:
-
-	AddType video/mp4 .mp4
-	AddType video/quicktime .mov
-
-5. Add crontab entries to encode and scan your videos folders.
-   Make sure to use the correct path to Videos5 index.php, and redirect the 
-   output into log files that httpd can write into.
-   Also make sure that the user running the 'encode' crontab has write access 
-   to your videos folders, since this is where the newly encoded files will be
-   saved.
-
-	* * * * * /usr/bin/php /var/www/videos5/index.php encode >> /var/www/videos5/logs/encode.log 2>&1
-	0 4 * * * /bin/nice /usr/bin/php /var/www/videos5/index.php find > /var/www/videos5/logs/found_movies.log 2>&1
-
-6. Manually launch a scan of your videos folder:
-
-	/usr/bin/php /var/www/videos5/index.php find
-
-Once that command completes, you should be able to browse your videos using 
-the web interface, stream compatible videos in your browser, and queue 
-incompatible videos for encoding.
-
-The default PIN for protected user profiles is "1234".
-
-
-Customizing Videos5
--------------------
-
-You can customize some setting that Videos5 uses in the web interface or to 
-encode videos.
-Look in the settings table in your videos5 database.
-
-'paths': Where Videos5 will look for videos to display in the web interface.
-         One path per line, i.e. line-feed (\n) separated values.
-
-'encode_command': The command used to encode videos. Make sure to use 
-                  $input and $output for the filenames to use as input and 
-                  output.
-                  The default encode_command should produce videos compatible 
-                  with all Apple mobile devices, and webkit-based browsers.
-
-'encode_extension': The file extension used for newly encoded files.
-
-'video_extensions': The file extensions that Videos5 will look for in your 
-                    videos folders to find video files.
-
-'ignored_devices': If present, this setting will identify all the devices that
-                   you don't care about. Files not compatible with those 
-                   devices, but compatible with all others, will not have 
-                   an 'Encode' option in the UI; only Play will be available.
-                   Coma-separated value.
