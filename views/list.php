@@ -1,8 +1,8 @@
 <div>
 <?php require 'views/toolbar.php' ?>
-<ul class="rounded">
+<!-- <ul class="rounded">
     <li><a class="" href="#">Encode All</a></li>
-</ul>
+</ul> -->
 <?php
 //Capture output, set up endoce all
 extract($helper->getPaths($_GET));
