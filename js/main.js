@@ -72,7 +72,10 @@ $(document).ready(function(e){
 
         if('out' == data.direction) {
             //Hmm, thought since currentpage is a $, then i could currentpage(selector)
-            $('video',currentpage).get(0).pause();
+            var player = $('video',currentpage).get(0);
+            if(player) {
+                player.pause();
+            }
         } 
         return true;
     });
