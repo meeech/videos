@@ -25,7 +25,7 @@ switch ($page) {
 
 ?>
 
-    <h1><?= $pageTitle ?></h1>
+    <h1><?php echo  $pageTitle ?></h1>
 
     <?php if ($homeButton): ?>
         <a class="button slideup" href="#home">Home</a>

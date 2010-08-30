@@ -7,7 +7,7 @@
     //Pull paths from config - this represents the dirs we'll drill down to.
     foreach ($config->paths as $path) { ?>
         <li>
-            <a href="index.php?page=list&path=<?=$path?>"><?= basename($path) ?></a>
+            <a href="index.php?page=list&path=<?php echo $path?>"><?php echo  basename($path) ?></a>
         </li>
     <?php 
     } 

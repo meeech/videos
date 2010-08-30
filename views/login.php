@@ -11,7 +11,7 @@
 
     <form class="jqt" action="login.php" method="post">
         <label for="username">Username</label>
-        <input type="text" name="username" value="<?= $username ?>">
+        <input type="text" name="username" value="<?php echo  $username ?>">
         <label for="password">Password</label>
         <input type="password" name="password" value="1234">
         <input type="submit" value="Submit" class="submit">

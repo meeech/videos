@@ -26,15 +26,15 @@ if(isset($_GET['type']) && 'json' == $_GET['type']) {
             $percentDone = $nowEncoding['percent'];
         }
         ?>
-        <li class="<?=$class?>">
+        <li class="<?php echo $class?>">
             <?php if ($percentDone): ?>
                 <!-- @bookmark  When cancel, set error code, so encode can move onto next one. -->
                 <div class="cancel-button"><a href="encode.php?cancel" class="redButton">Cancel</a></div>
-                <div class="percent-done"><?= $percentDone ?>%</div>
+                <div class="percent-done"><?php echo  $percentDone ?>%</div>
                 
             <?php endif ?>
-            <span class="name"><?= trim(basename($qItem['file'])); ?></span>
-            <div class="small"><?= dirname($qItem['file'])?></div>
+            <span class="name"><?php echo  trim(basename($qItem['file'])); ?></span>
+            <div class="small"><?php echo  dirname($qItem['file'])?></div>
         </li>
     <?php endforeach ?>
     
